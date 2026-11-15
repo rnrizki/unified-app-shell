@@ -98,6 +98,16 @@ class UnifiedAppShell {
     if (roleFilterBadge) {
       roleFilterBadge.textContent = `Akses Aktif: ${(user.roles || []).join(', ') || 'member'}`;
     }
+
+    // Show IAM Admin Dashboard link if user has admin role
+    const adminLink = document.getElementById('adminConsoleLink');
+    if (adminLink) {
+      if ((user.roles || []).includes('admin')) {
+        adminLink.classList.remove('hidden');
+      } else {
+        adminLink.classList.add('hidden');
+      }
+    }
   }
 
   mountInitialApp() {
