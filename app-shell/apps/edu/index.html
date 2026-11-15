@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Platform (portal-edukasi)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #3b82f6;
+    }
+    body[data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #2563eb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+    .header {
+      margin-bottom: 28px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      margin-bottom: 8px;
+    }
+    h1 { font-size: 24px; font-weight: 700; }
+    p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .card h2 { font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .meta-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .meta-label { color: var(--muted); }
+    .meta-val { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+    .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+    button {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.9; }
+    .btn-secondary { background: rgba(255, 255, 255, 0.08); color: var(--text); border: 1px solid var(--border); }
+    .event-log {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 8px;
+      padding: 12px;
+      max-height: 160px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .log-item { color: #34d399; }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="header">
+    <span class="badge">Tier 3: Smart Iframe Mode</span>
+    <h1>portal-edukasi (Learning Platform)</h1>
+    <p>Aplikasi anak terisolasi via Sandbox Iframe dengan jembatan komunikasi Cross-App Event Bus (postMessage).</p>
+  </div>
+
+  <div class="grid">
+    <!-- Sesi dari App Shell -->
+    <div class="card">
+      <h2>Sesi OIDC dari Container</h2>
+      <div class="meta-row"><span class="meta-label">Nama Pengguna</span><span class="meta-val" id="userName">-</span></div>
+      <div class="meta-row"><span class="meta-label">Email SSO</span><span class="meta-val" id="userEmail">-</span></div>
+      <div class="meta-row"><span class="meta-label">Peran Aktif</span><span class="meta-val" id="userRoles">-</span></div>
+      <div class="meta-row"><span class="meta-label">Status Sinkronisasi</span><span class="meta-val" style="color:#10b981;">Tersinkronisasi</span></div>
+    </div>
+
+    <!-- Kontrol Uji Coba Event Bus -->
+    <div class="card">
+      <h2>Uji Coba postMessage Event Bus</h2>
+      <p style="font-size: 12px; margin-bottom: 12px;">Kirim pesan langsung ke antarmuka Unified App Shell:</p>
+      <div class="btn-group">
+        <button onclick="sendBadgeToShell()">
+          Kirim Notifikasi Tugas Baru ke Shell Topbar
+        </button>
+        <button class="btn-secondary" onclick="navigateToApp('internal-ops')">
+          Navigasi Dalam-Kontainer ke internal-ops (Deep Linking)
+        </button>
+      </div>
+    </div>
+
+    <!-- Log Pesan Masuk -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>Log Kejadian Event Bus (Real-Time)</h2>
+      <div id="eventLogs" class="event-log">
+        <div class="log-item">[INIT] Menunggu sinyal inisialisasi sesi dari Unified App Shell...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/apps/edu/child-bridge.js"></script>
+</body>
+</html>

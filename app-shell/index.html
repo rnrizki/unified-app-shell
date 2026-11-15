@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMREI - Unified App Shell</title>
+  <link rel="stylesheet" href="/css/shell.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Tier 2: Unified App Shell (Web Container) -->
+  <div id="appContainer" class="shell-layout">
+    
+    <!-- Top Navigation Bar -->
+    <header class="shell-topbar">
+      <div class="topbar-left">
+        <!-- App Switcher Trigger -->
+        <button id="appSwitcherBtn" class="topbar-btn app-switcher-trigger" title="Buka App Switcher" aria-label="App Switcher">
+          <svg class="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          </svg>
+          <span class="switcher-label">Aplikasi</span>
+        </button>
+
+        <!-- Brand / Portal Logo -->
+        <div class="brand-container">
+          <svg class="brand-emblem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          <div class="brand-text">
+            <span class="brand-title">LMREI</span>
+            <span class="brand-subtitle">Unified App Shell</span>
+          </div>
+        </div>
+
+        <!-- Active App Indicator -->
+        <div class="active-app-pill" id="activeAppPill">
+          <span class="status-indicator"></span>
+          <span id="activeAppName" class="active-title">Memuat...</span>
+          <span id="activeAppMode" class="active-mode-badge">iframe</span>
+        </div>
+      </div>
+
+      <div class="topbar-center">
+        <!-- Global Search -->
+        <div class="global-search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="text" id="globalSearchInput" placeholder="Cari aplikasi atau modul..." autocomplete="off">
+          <kbd class="search-kbd">/</kbd>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <!-- Cross-App Event Bus Live Pulse Indicator -->
+        <div class="event-bus-badge" id="eventBusIndicator" title="Cross-App Event Bus Aktif">
+          <span class="bus-dot"></span>
+          <span class="bus-label">Event Bus</span>
+        </div>
+
+        <!-- Notification Center Bell -->
+        <div class="notification-wrapper">
+          <button id="notificationBtn" class="topbar-btn" title="Notifikasi" aria-label="Notifikasi">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span id="unreadBadge" class="notification-counter hidden">0</span>
+          </button>
+          
+          <!-- Notification Dropdown Panel -->
+          <div id="notificationPanel" class="dropdown-panel notification-panel hidden">
+            <div class="panel-header">
+              <h3>Notifikasi Terpusat</h3>
+              <button id="clearNotificationsBtn" class="text-btn">Bersihkan</button>
+            </div>
+            <div id="notificationList" class="notification-list">
+              <div class="empty-state">Belum ada notifikasi baru</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Toggle Switcher -->
+        <button id="themeToggleBtn" class="topbar-btn" title="Ganti Tema (Dark/Light)" aria-label="Toggle Theme">
+          <svg id="themeIconDark" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg id="themeIconLight" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
+        <!-- User Profile Dropdown -->
+        <div class="user-menu-wrapper">
+          <button id="userMenuBtn" class="user-profile-btn" aria-label="User Profile">
+            <div id="userAvatar" class="avatar-circle">?</div>
+            <div class="user-brief">
+              <span id="userDisplayName" class="u-name">Tamu</span>
+              <span id="userPrimaryRole" class="u-role-tag">SSO</span>
+            </div>
+            <svg class="chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
+
+          <!-- User Menu Panel -->
+          <div id="userDropdownPanel" class="dropdown-panel user-panel hidden">
+            <div class="user-panel-info">
+              <div class="user-full-name" id="menuUserName">User Name</div>
+              <div class="user-full-email" id="menuUserEmail">user@lmrei.id</div>
+              <div class="user-roles-container" id="menuUserRoles"></div>
+            </div>
+            <div class="menu-divider"></div>
+            <a href="https://user-shell-login.lmrei.id" class="menu-item" target="_blank">
+              <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              <span>Ganti Akun SSO</span>
+            </a>
+            <a href="https://keycloak.lmrei.id/realms/portal-enterprise/account/" class="menu-item" target="_blank" rel="noopener">
+              <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span>Keycloak Self-Service</span>
+            </a>
+            <div class="menu-divider"></div>
+            <button id="logoutBtn" class="menu-item menu-item-danger">
+              <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              <span>Keluar (SSO Logout)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- App Switcher Modal / Overlay -->
+    <div id="switcherOverlay" class="switcher-overlay hidden">
+      <div class="switcher-modal">
+        <div class="switcher-header">
+          <div class="switcher-title-group">
+            <h2>Katalog Aplikasi Terdaftar</h2>
+            <p>Declarative Application Registry (<code class="code-tag">app-registry.json</code>)</p>
+          </div>
+          <button id="closeSwitcherBtn" class="icon-close-btn">&times;</button>
+        </div>
+
+        <div class="switcher-filter-bar">
+          <span class="filter-label">Filter Akses Pengguna:</span>
+          <span id="userRoleFilterBadge" class="role-badge-tag">Role: All</span>
+        </div>
+
+        <div id="appsGridContainer" class="apps-grid">
+          <!-- Apps populated dynamically from app-registry.json -->
+        </div>
+
+        <div class="switcher-footer">
+          <span class="footer-meta">Container Version: <strong id="containerVerText">1.0.0</strong></span>
+          <a href="/app-registry.json" target="_blank" class="registry-link">Lihat Raw JSON</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area: Sandboxed Container -->
+    <main class="shell-viewport">
+      <!-- Loading Skeleton Indicator -->
+      <div id="iframeLoadingIndicator" class="iframe-loading hidden">
+        <div class="spinner"></div>
+        <div class="loading-text">Memuat modul aplikasi...</div>
+      </div>
+
+      <!-- Isolated Dynamic Web View (Smart Iframe) -->
+      <iframe
+        id="appFrame"
+        name="appFrame"
+        class="managed-app-frame"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads"
+        title="Managed Application View"
+        src="about:blank"
+      ></iframe>
+    </main>
+
+  </div>
+
+  <!-- App Shell Core Scripts (Bundle < 20 KB) -->
+  <script src="/js/event-bus.js"></script>
+  <script src="/js/registry-loader.js"></script>
+  <script src="/js/shell.js"></script>
+</body>
+</html>

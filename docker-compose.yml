@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  shell:
+    build:
+      context: .
+      dockerfile: Dockerfile.shell
+    image: unified-shell-app:latest
+    container_name: unified-shell-app
+    restart: unless-stopped
+    ports:
+      - "8085:80"
+    networks:
+      - dokploy-network
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=dokploy-network"
+      - "traefik.http.routers.unified-shell-app-web.rule=Host(`user-shell-app.lmrei.id`)"
+      - "traefik.http.routers.unified-shell-app-web.entrypoints=web"
+      - "traefik.http.routers.unified-shell-app-web.middlewares=redirect-to-https@file"
+      - "traefik.http.routers.unified-shell-app-websecure.rule=Host(`user-shell-app.lmrei.id`)"
+      - "traefik.http.routers.unified-shell-app-websecure.entrypoints=websecure"
+      - "traefik.http.routers.unified-shell-app-websecure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.unified-shell-app.loadbalancer.server.port=80"
+
+  login:
+    build:
+      context: ./login-bridge
+      dockerfile: Dockerfile
+    image: unified-shell-login:latest
+    container_name: unified-shell-login
+    restart: unless-stopped
+    ports:
+      - "8086:8000"
+    environment:
+      - KEYCLOAK_INTERNAL_URL=http://mail-keycloak-wr0ust:8080
+      - KEYCLOAK_PUBLIC_URL=https://keycloak.lmrei.id
+      - REALM_NAME=portal-enterprise
+      - CLIENT_ID=user-shell
+      - APP_SHELL_URL=https://user-shell-app.lmrei.id
+      - COOKIE_DOMAIN=.lmrei.id
+    networks:
+      - dokploy-network
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=dokploy-network"
+      - "traefik.http.routers.unified-shell-login-web.rule=Host(`user-shell-login.lmrei.id`)"
+      - "traefik.http.routers.unified-shell-login-web.entrypoints=web"
+      - "traefik.http.routers.unified-shell-login-web.middlewares=redirect-to-https@file"
+      - "traefik.http.routers.unified-shell-login-websecure.rule=Host(`user-shell-login.lmrei.id`)"
+      - "traefik.http.routers.unified-shell-login-websecure.entrypoints=websecure"
+      - "traefik.http.routers.unified-shell-login-websecure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.unified-shell-login.loadbalancer.server.port=8000"
+
+networks:
+  dokploy-network:
+    external: true

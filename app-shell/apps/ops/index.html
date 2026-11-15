@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operations & Task Hub (internal-ops)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090e17;
+      --card-bg: rgba(17, 24, 39, 0.8);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --accent: #f59e0b;
+      --success: #10b981;
+    }
+    body[data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #d97706;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+    .header { margin-bottom: 24px; }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      margin-bottom: 8px;
+    }
+    h1 { font-size: 24px; font-weight: 700; }
+    p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .stat-label { font-size: 12px; color: var(--muted); }
+    .stat-num { font-size: 24px; font-weight: 700; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+    th { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--muted); font-weight: 600; }
+    td { padding: 12px; border-bottom: 1px solid var(--border); }
+    .status-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-ok { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .status-warn { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="header">
+    <span class="badge">Tier 3: Reverse-Proxy Mode (/ops)</span>
+    <h1>internal-ops (Operations & Task Hub)</h1>
+    <p>Aplikasi operasional internal dengan perutean subpath reverse proxy dan otorisasi peran [staff, admin].</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Tugas Tertunda</div>
+      <div class="stat-num" style="color:#fbbf24;">14</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Kesehatan Layanan</div>
+      <div class="stat-num" style="color:#34d399;">100%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Sesi Aktif OIDC</div>
+      <div class="stat-num" style="color:#60a5fa;">4 Pengguna</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Perutean Jalur</div>
+      <div class="stat-num" style="font-size: 16px; margin-top: 10px; color:#a78bfa;">/ops (Reverse Proxy)</div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <h2 style="font-size: 16px; margin-bottom: 14px;">Daftar Antrean Tugas Operasional</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID Tugas</th>
+          <th>Nama Operasi</th>
+          <th>Penanggung Jawab</th>
+          <th>Prioritas</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>OPS-1092</code></td>
+          <td>Sinkronisasi Keycloak Token Realm portal-enterprise</td>
+          <td>doni2@lmrei.id (admin)</td>
+          <td>Tinggi</td>
+          <td><span class="status-pill status-ok">Selesai</span></td>
+        </tr>
+        <tr>
+          <td><code>OPS-1093</code></td>
+          <td>Verifikasi Endpoint Smart Iframe Sandbox</td>
+          <td>rizki3@lmrei.id (admin, staff)</td>
+          <td>Tinggi</td>
+          <td><span class="status-pill status-ok">Berjalan</span></td>
+        </tr>
+        <tr>
+          <td><code>OPS-1094</code></td>
+          <td>Pengujian Cross-App Event Bus postMessage</td>
+          <td>andri4@lmrei.id (staff)</td>
+          <td>Sedang</td>
+          <td><span class="status-pill status-warn">Menunggu Review</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Listen for theme sync from shell
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.source === 'UNIFIED_APP_SHELL' && e.data.type === 'SHELL:SET_THEME') {
+        document.body.setAttribute('data-theme', e.data.payload.theme);
+      }
+    });
+  </script>
+</body>
+</html>
