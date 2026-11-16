@@ -50,6 +50,16 @@
       "allowedOrigins": ["https://api-reidig-andri.lmrei.id"],
       "requiredRoles": ["admin"],
       "healthCheckEndpoint": "https://api-reidig-andri.lmrei.id"
+    },
+    {
+      "id": "server-report",
+      "name": "Server Report",
+      "entryUrl": "https://server-report.lmrei.id",
+      "routePrefix": "/server-report",
+      "embedMode": "iframe-bridge",
+      "allowedOrigins": ["https://server-report.lmrei.id"],
+      "requiredRoles": ["staff", "admin"],
+      "healthCheckEndpoint": "https://server-report.lmrei.id"
     }
   ]
 }
